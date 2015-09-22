@@ -9,5 +9,6 @@ all:
 	ld -o area4 area4.o
 	as -o area5.o area5.s
 	ld -o area5 area5.o
+	gcc -o area area.c
 clean:
-	rm years.o years area2.o area2 area3.o area3 area4.o area4 area5.o area5
+	rm years.o years area2.o area2 area3.o area3 area4.o area4 area5.o area5 area
