@@ -7,12 +7,11 @@ _start:
 	cmp R2, R0
 	bgt _end
 	b _mod_start
-/*subtraction and bit shift left*/
+/*bit shift left*/
 _mod:
 	cmp R2, R0
 	bgt _result
 _mod_start:
-	sub R0, R0, R2
 	lsl R2, #1
 	b _mod
 /*subtract and bit shift right*/

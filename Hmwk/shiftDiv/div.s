@@ -9,13 +9,11 @@ _start:
 	cmp R2, R1
 	bgt _end
 	b _div_start
-/*subtraction and bit shift left*/
+/*bit shift left*/
 _div:
 	cmp R2, R1
 	bgt _result
 _div_start:
-	sub R1, R1, R2
-	add R0, R3
 	lsl R2, #1
 	lsl R3, #1  @ shifts increment along with divisor a.k.a. multiply by 2
 	b _div
