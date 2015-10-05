@@ -5,5 +5,6 @@ all:
 	ld -o case case.o
 	as -o ifelse.o ifelse.s
 	ld -o ifelse ifelse.o
+	gcc -o conditionals conditionals.c
 clean:
 	rm if if.o case case.o ifelse ifelse.o
