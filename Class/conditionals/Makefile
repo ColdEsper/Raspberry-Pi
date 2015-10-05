@@ -7,4 +7,4 @@ all:
 	ld -o ifelse ifelse.o
 	gcc -o conditionals conditionals.c
 clean:
-	rm if if.o case case.o ifelse ifelse.o
+	rm if if.o case case.o ifelse ifelse.o conditionals

@@ -5,5 +5,6 @@ all:
 	ld -o do do.o
 	as -o for.o for.s
 	ld -o for for.o
+	gcc -o looping looping.c
 clean:
-	rm while.o while do.o do for.o for
+	rm while.o while do.o do for.o for looping
