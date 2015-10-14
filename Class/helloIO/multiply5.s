@@ -3,6 +3,8 @@ return2: .word 0
 
 .text
 
+.global mult_by_5
+
 mult_by_5:
 	ldr R1, address_of_return2
 	str LR, [R1]

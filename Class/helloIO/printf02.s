@@ -17,15 +17,6 @@ return: .word 0
 .balign 4
 return2: .word 0
 .text
-/* mult_by_5 function
-mult_by_5:
-ldr r1, address_of_return2       
-str lr , [r1]
-add r0 , r0 , r0 , LSL #2
-ldr lr, address_of_return2       
-ldr lr, [lr]
-bx lr                            
-address_of_return2: .word return2 */
 
 .global main
 main:
