@@ -1,3 +1,4 @@
+.data
 .balign 4
 return2: .word 0
 
