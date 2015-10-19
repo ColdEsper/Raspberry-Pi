@@ -1,4 +1,4 @@
 all:
-	gcc -o degree degree.s
+	gcc -g -o degree degree.s
 clean:
 	rm degree
