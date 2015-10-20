@@ -5,7 +5,10 @@ class BinaryPoint:
 		self.actual = value
 	def binary (self):
 		return bin(self.integer)
+	def hex (self):
+		return hex(self.integer)
 	def display (self):
 		print(self.actual)
 		print(self.binary())
+		print(self.hex())
 		print("bp "+str(-self.bp))
