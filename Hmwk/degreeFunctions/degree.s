@@ -73,12 +73,6 @@ endDo:
 	bx LR
 
 address_of_return: .word return
-/* 5.0/9.0 at binary point 16 */
-fiveNinths: .word 0x8e39
-.global fiveNinths
-/* 9.0/5.0 at binary point 16 */
-nineFifths: .word 0x1cccd
-.global nineFifths
 
 .global printf
 .global scanf

@@ -71,3 +71,5 @@ endConvertFtoC:
 	bx LR
 
 address_of_return: .word return
+/* 5.0/9.0 at binary point 16 */
+fiveNinths: .word 0x8e39
