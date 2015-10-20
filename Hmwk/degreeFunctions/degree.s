@@ -8,7 +8,9 @@ range_input_msg: .asciz "If range is degree Centigrade input 1\nIf range is degr
 .balign 4
 inputFormat: .asciz "%d"
 .balign 4
-printFormat: .asciz "%d\n"
+printFormat: .asciz "         %d\n"
+.balign 4
+printFormat2: .asciz "%d "
 .balign 4
 start: .word 0
 .balign 4
@@ -80,39 +82,41 @@ problemOne:
 	/*print msg*/
 	ldr R0, =display_msg
 	bl printf
-	ldr R3, =start
-	ldr R3, [R3]
-	ldr R6, =counter
-	str R3, [R6]
+	ldr R1, =start
+	ldr R1, [R1]
+	ldr R3, =counter
+	str R1, [R3]
 	ldr R5, =end
 	ldr R4, [R5]
 	add R4, #1
 	str R4, [R5]
 	b convertCtoFStart
 convertCtoF:
-	ldr R3, =counter
-	ldr R3, [R3]
+	ldr R1, =counter
+	ldr R1, [R1]
 	ldr R4, =end
 	ldr R4, [R4]
 convertCtoFStart:
-	cmp R3, R4
+	cmp R1, R4
 	beq endConvertCtoF
-	mov R2, R3
-	/*now scales up R2 to bp 7*/
-	lsl R2, #7
+	ldr R0, =printFormat2
+	bl printf
 	ldr R5, =nineFifths
 	ldr R5, [R5]
-	mul R2, R5
-	/*now scales down R2 from bp 7 to bp 0*/
-	lsr R2, #7
-	add R2, #32
+	ldr R3, =counter
+	ldr R3, [R3]
+	mov R1, R3
+	/* R1=R1*integer((9/5)>>16)*/
+	mul R1, R5
+	/*Scales down R1 from bp 16 to bp 0 since nineFifths was at bp 16*/
+	lsr R1, #16
+	add R1, #32
 	/*increment counter R3*/
 	add R3, #1
 	ldr R6, =counter
 	str R3, [R6]
 	/*print conversion*/
 	ldr R0, =printFormat
-	mov R1, R2
 	bl printf
 	b convertCtoF
 endConvertCtoF:
@@ -131,6 +135,44 @@ problemTwo:
 	/*print msg*/
 	ldr R0, =display_msg
 	bl printf
+	ldr R1, =start
+	ldr R1, [R1]
+	ldr R3, =counter
+	str R1, [R3]
+	ldr R5, =end
+	ldr R4, [R5]
+	add R4, #1
+	str R4, [R5]
+	b convertFtoCStart
+convertFtoC:
+	ldr R1, =counter
+	ldr R1, [R1]
+	ldr R4, =end
+	ldr R4, [R4]
+convertFtoCStart:
+	cmp R1, R4
+	beq endConvertFtoC
+	ldr R0, =printFormat2
+	bl printf
+	ldr R5, =fiveNinths
+	ldr R5, [R5]
+	ldr R3, =counter
+	ldr R3, [R3]
+	mov R1, R3
+	sub R1, #32
+	/* R1=R1*integer((5/9)>>16)*/
+	mul R1, R5
+	/*Scales down R1 from bp 16 to bp 0 since nineFifths was at bp 16*/
+	lsr R1, #16
+	/*increment counter R3*/
+	add R3, #1
+	ldr R6, =counter
+	str R3, [R6]
+	/*print conversion*/
+	ldr R0, =printFormat
+	bl printf
+	b convertFtoC
+endConvertFtoC:
 
 	/*return */
 	ldr R1, address_of_return2
@@ -139,10 +181,10 @@ problemTwo:
 
 address_of_return: .word return
 address_of_return2: .word return2
-/* 5.0/9.0 at binary point 7 */
-fiveNinths: .word 0x47
-/* 9.0/5.0 at binary point 7 */
-nineFifths: .word 0xe6
+/* 5.0/9.0 at binary point 16 */
+fiveNinths: .word 0x8e39
+/* 9.0/5.0 at binary point 16 */
+nineFifths: .word 0x1cccd
 
 .global printf
 .global scanf
