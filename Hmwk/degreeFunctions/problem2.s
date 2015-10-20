@@ -1,10 +1,24 @@
 .data
+.balign 4
+counter: .word 0
+.balign 4
+beg: .word 0
+.balign 4
+end: .word 0
+.balign 4
 return: .word 0
 .text
 	.global problem2
 
 /*Fahrenheit to Celsius*/
 problem2:
+	/*save passed in args */
+	ldr R2, [R2]
+	ldr R4, =beg
+	str R2, [R4]
+	ldr R3, [R3]
+	ldr R4, =end
+	str R3, [R4]
 	/*save address of return */
 	ldr R1, address_of_return
 	str LR, [R1]

@@ -19,16 +19,10 @@ printFormat2: .asciz "%d "
 .global printFormat2
 .balign 4
 beg: .word 0
-.global beg
 .balign 4
 end: .word 0
-.global end
 .balign 4
 choice: .word 0
-.global choice 
-.balign 4
-counter: .word 0
-.global counter
 .balign 4
 return: .word 0 
 .balign 4
@@ -55,6 +49,10 @@ whileDo:
 	ldr R0, =inputFormat
 	ldr R1, =choice
 	bl scanf
+	/*loads up R2 and R3 with memory addresses as args
+		for either problem1 or problem2 */
+	ldr R2, =beg
+	ldr R3, =end
 	ldr R1, =choice
 	ldr R1, [R1]
 	cmp R1, #1
