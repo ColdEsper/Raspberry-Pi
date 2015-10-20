@@ -4,10 +4,8 @@ display_msg: .asciz "Display Degree Centigrade to Degree Fahrenheit\nFahrenheit 
 .global display_msg
 .balign 4
 input_msg: .asciz "Input beginning and end of temperature range.\n"
-.global input_msg 
 .balign 4
 range_input_msg: .asciz "If range is degree Centigrade input 1\nIf range is degree Fahrenheit input 2\n"
-.global range_input_msg 
 .balign 4
 inputFormat: .asciz "%d"
 .global inputFormat
