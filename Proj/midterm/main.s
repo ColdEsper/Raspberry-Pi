@@ -24,6 +24,15 @@ return: .word 0
 	beq \trueBranch
 .endm
 
+/*returns back to main loop after battle*/
+.macro initBattle
+	bl initBattler
+	mov R1, R0
+	ldr R0, =battlers
+	ldr LR, =mainLoop
+	b battle
+.endm
+
 mapBoundHigh = 25
 
 main:
@@ -32,6 +41,9 @@ main:
 	str LR, [R5]
 
 	/*initialization*/
+	mov R0, #0
+	bl time
+	bl srand
 	/* initializes main player*/
 	mov R1, #5
 	mov R2, #2
@@ -39,15 +51,6 @@ main:
 	ldr R0, =battlers
 	mov R1, #12
 	mov R2, #12
-	mov R3, #100
-	bl initBattler
-	/* initialize enemy */
-	mov R1, #3
-	mov R2, #2
-	push {R1, R2}
-	ldr R0, =(battlers+sizeOfBattler)
-	mov R1, #0
-	mov R2, #0
 	mov R3, #100
 	bl initBattler
 
@@ -86,7 +89,7 @@ moveLeft:
 	cmp R3, R1
 	bhi mainLoop
 	str R3, [R2]
-	b mainLoop
+	b chanceEncounter
 moveRight:
 	ldr R2, =(battlers+sizeOfStats)
 	ldr R1, [R2]
@@ -94,7 +97,7 @@ moveRight:
 	cmp R3, #mapBoundHigh
 	bhi mainLoop
 	str R3, [R2]
-	b mainLoop
+	b chanceEncounter
 moveUp:
 	ldr R2, =(battlers+sizeOfStats+sizeOfCoord/2)
 	ldr R1, [R2]
@@ -102,7 +105,7 @@ moveUp:
 	cmp R3, #mapBoundHigh
 	bhi mainLoop
 	str R3, [R2]
-	b mainLoop
+	b chanceEncounter
 moveDown:
 	ldr R2, =(battlers+sizeOfStats+sizeOfCoord/2)
 	ldr R1, [R2]
@@ -111,7 +114,83 @@ moveDown:
 	cmp R3, R1
 	bhi mainLoop
 	str R3, [R2]
+	b chanceEncounter
+chanceEncounter:
+	bl rand
+	mov R1, #100
+	bl mod
+	/* 5 percent chance of enemy encounter */
+	cmp R0, #5
+	blo genEnemy
 	b mainLoop
+genEnemy:
+	bl rand
+	mov R1, #6
+	bl mod
+enemyOne:
+	cmp R0, #0
+	bne enemyTwo
+	mov R1, #3
+	mov R2, #2
+	push {R1, R2}
+	ldr R0, =(battlers+sizeOfBattler)
+	mov R1, #0
+	mov R2, #0
+	mov R3, #50
+	initBattle
+enemyTwo:
+	cmp R0, #1
+	bne enemyThree
+	mov R1, #4
+	mov R2, #2
+	push {R1, R2}
+	ldr R0, =(battlers+sizeOfBattler)
+	mov R1, #0
+	mov R2, #0
+	mov R3, #55
+	initBattle
+enemyThree:
+	cmp R0, #2
+	bne enemyFour
+	mov R1, #4
+	mov R2, #3
+	push {R1, R2}
+	ldr R0, =(battlers+sizeOfBattler)
+	mov R1, #0
+	mov R2, #0
+	mov R3, #60
+	initBattle
+enemyFour:
+	cmp R0, #3
+	bne enemyFive
+	mov R1, #5
+	mov R2, #5
+	push {R1, R2}
+	ldr R0, =(battlers+sizeOfBattler)
+	mov R1, #0
+	mov R2, #0
+	mov R3, #67
+	initBattle
+enemyFive:
+	cmp R0, #4
+	bne enemySix
+	mov R1, #9
+	mov R2, #2
+	push {R1, R2}
+	ldr R0, =(battlers+sizeOfBattler)
+	mov R1, #0
+	mov R2, #0
+	mov R3, #78
+	initBattle
+enemySix:
+	mov R1, #3
+	mov R2, #10
+	push {R1, R2}
+	ldr R0, =(battlers+sizeOfBattler)
+	mov R1, #0
+	mov R2, #0
+	mov R3, #210
+	initBattle
 endMainLoop:
 	/*return*/
 	ldr R5, =return
@@ -127,3 +206,10 @@ mainLoopMessage:
 	.asciz "or... Press q to quit\n"
 .balign 4
 mainInputFormat: .asciz "%c"
+
+.global printf
+.global scanf
+.global getChar
+.global srand
+.global rand
+.global time
