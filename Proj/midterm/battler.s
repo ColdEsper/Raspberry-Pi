@@ -9,8 +9,9 @@
 sizeOfCoord=8
 /* stats structure
 	1 word HP
-	1 word Attack */
-sizeOfStats=8
+	1 word Attack 
+	1 word Defense */
+sizeOfStats=12
 /* battler structure layout
    1 stats 
    1 coordinate position*/

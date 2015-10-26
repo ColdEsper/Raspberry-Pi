@@ -11,30 +11,50 @@ return2: .word 0
 .global initBattler
 .global initStats
 
+/*args:
+	R0 is memory pointer to coordinate structure
+	R1 is X value
+	R2 is Y value
+*/
 initCoord:
 	/* X = 0 */
-	mov R5, #0
-	str R5, [R0]
+	str R1, [R0]
 	/* Y = 0 */
-	str R5, [R0,#4]
+	str R2, [R0,#4]
 	bx LR
 
+/*args:
+	R0 is memory pointer to stats structure
+	R1 is Attack
+	R2 is Defense
+	R3 is HP
+*/
 initStats:
-	/*set HP to 100 */
-	mov R5, #100
-	str R5, [R0]
-	/*set Attack to 5 */
-	mov R5, #5
-	str R5, [R0,#4]
+	/*set HP*/
+	str R3, [R0]
+	/*set Attack*/
+	str R1, [R0,#4]
+	/*set Defense */
+	str R2, [R0,#8]
 	bx LR
 
+/*args:
+	R0 is memory pointer to battler structure
+	R1 is coordinate X
+	R2 is coordinate Y
+	R3 is HP
+	pushed on to stack is:
+	Attack,Defense
+*/
 initBattler:
 	/* save return address */
 	ldr R5, =return2
 	str LR, [R5]
-	bl initStats
 	add R0, R0, #sizeOfStats
 	bl initCoord
+	sub R0, R0, #sizeOfStats
+	pop {R1, R2}
+	bl initStats
 	/* return */
 	ldr R5, =return2
 	ldr LR, [R5]

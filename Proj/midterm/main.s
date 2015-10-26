@@ -24,16 +24,33 @@ return: .word 0
 	beq \trueBranch
 .endm
 
+mapBoundHigh = 25
+
 main:
 	/* save return address*/
 	ldr R5, =return
 	str LR, [R5]
 
 	/*initialization*/
+	/* initializes main player*/
+	mov R1, #5
+	mov R2, #2
+	push {R1, R2}
 	ldr R0, =battlers
+	mov R1, #12
+	mov R2, #12
+	mov R3, #100
 	bl initBattler
+	/* initialize enemy */
+	mov R1, #3
+	mov R2, #2
+	push {R1, R2}
 	ldr R0, =(battlers+sizeOfBattler)
+	mov R1, #0
+	mov R2, #0
+	mov R3, #100
 	bl initBattler
+
 mainLoop:
 	ldr R0, =mainLoopMessage
 	ldr R5, =battlers
@@ -64,26 +81,36 @@ mainLoop:
 moveLeft:
 	ldr R2, =(battlers+sizeOfStats)
 	ldr R1, [R2]
-	sub R1, R1, #1
-	str R1, [R2]
+	sub R3, R1, #1
+	/*branch on overflow (subtracting from 0)*/
+	cmp R3, R1
+	bhi mainLoop
+	str R3, [R2]
 	b mainLoop
 moveRight:
 	ldr R2, =(battlers+sizeOfStats)
 	ldr R1, [R2]
-	add R1, R1, #1
-	str R1, [R2]
+	add R3, R1, #1
+	cmp R3, #mapBoundHigh
+	bhi mainLoop
+	str R3, [R2]
 	b mainLoop
 moveUp:
 	ldr R2, =(battlers+sizeOfStats+sizeOfCoord/2)
 	ldr R1, [R2]
-	add R1, R1, #1
-	str R1, [R2]
+	add R3, R1, #1
+	cmp R3, #mapBoundHigh
+	bhi mainLoop
+	str R3, [R2]
 	b mainLoop
 moveDown:
 	ldr R2, =(battlers+sizeOfStats+sizeOfCoord/2)
 	ldr R1, [R2]
-	sub R1, R1, #1
-	str R1, [R2]
+	sub R3, R1, #1
+	/*branch on overflow (subtracting from 0)*/
+	cmp R3, R1
+	bhi mainLoop
+	str R3, [R2]
 	b mainLoop
 endMainLoop:
 	/*return*/
