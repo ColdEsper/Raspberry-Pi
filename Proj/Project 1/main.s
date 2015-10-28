@@ -25,16 +25,18 @@ return: .word 0
 .endm
 
 /*returns back to main loop after battle*/
-.macro initBattle Attack, Defense, HP
-	mov R1, #\Attack
-	mov R2, #\Defense
-	push {R1, R2}
+.macro initBattle HP, Attack, Defense, Speed, NameAddress
+	mov R1, #\HP
+	mov R2, #\Attack
+	mov R3, #\Defense
+	mov R0, #\Speed
+	push {R0, R1, R2, R3}
 	ldr R0, =(battlers+sizeOfBattler)
 	mov R1, #0
 	mov R2, #0
-	mov R3, #\HP
+	ldr R3, =\NameAddress
 	bl initBattler
-	mov R1, R0
+	ldr R1, =(battlers+sizeOfBattler)
 	ldr R0, =battlers
 	ldr LR, =mainLoop
 	b battle
@@ -52,13 +54,15 @@ main:
 	bl time
 	bl srand
 	/* initializes main player*/
-	mov R1, #5
-	mov R2, #2
-	push {R1, R2}
+	mov R1, #100
+	mov R2, #7
+	mov R3, #5
+	mov R0, #6
+	push {R0, R1, R2, R3}
 	ldr R0, =battlers
 	mov R1, #12
 	mov R2, #12
-	mov R3, #100
+	ldr R3, =playerName
 	bl initBattler
 
 mainLoop:
@@ -127,7 +131,7 @@ chanceEncounter:
 	mov R1, #100
 	bl mod
 	/* 5 percent chance of enemy encounter */
-	cmp R0, #5
+	cmp R0, #15
 	blo genEnemy
 	b mainLoop
 genEnemy:
@@ -137,25 +141,25 @@ genEnemy:
 enemyOne:
 	cmp R0, #0
 	bne enemyTwo
-	initBattle 3 2 50
+	initBattle 50 3 2 5 enemyOneName
 enemyTwo:
 	cmp R0, #1
 	bne enemyThree
-	initBattle 4 2 55
+	initBattle 55 4 2 5 enemyTwoName
 enemyThree:
 	cmp R0, #2
 	bne enemyFour
-	initBattle 4 3 60
+	initBattle 60 4 3 5 enemyThreeName
 enemyFour:
 	cmp R0, #3
 	bne enemyFive
-	initBattle 5 5 67
+	initBattle 67 5 5 6 enemyFourName
 enemyFive:
 	cmp R0, #4
 	bne enemySix
-	initBattle 9 2 78
+	initBattle 78 9 2 7 enemyFiveName
 enemySix:
-	initBattle 3 10 210
+	initBattle 210 3 10 8 enemySixName
 endMainLoop:
 	/*return*/
 	ldr R5, =return
@@ -178,3 +182,18 @@ mainInputFormat: .asciz "%c"
 .global srand
 .global rand
 .global time
+
+.balign 4
+playerName: .asciz "Hero"
+.balign 4
+enemyOneName: .asciz "Enemy V1"
+.balign 4
+enemyTwoName: .asciz "Enemy V2"
+.balign 4
+enemyThreeName: .asciz "Enemy V3"
+.balign 4
+enemyFourName: .asciz "Enemy V4"
+.balign 4
+enemyFiveName: .asciz "Enemy V5"
+.balign 4
+enemySixName: .asciz "Enemy V6"

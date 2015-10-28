@@ -6,6 +6,8 @@ return: .word 0
 .text
 .global battle
 
+.include "battler.s"
+
 /* args:
 	R0 is pointer to controllable battler
 	R1 is pointer to AI battler */
@@ -17,6 +19,8 @@ battle:
 	mov R5, R0
 	mov R6, R1
 	ldr R0, =encounterMessage
+	add R1, #(sizeOfStats+sizeOfCoord)
+	ldr R1, [R1]
 	bl printf
 battleLoop:
 	ldr R0, =battleLoopMessage
@@ -32,7 +36,7 @@ battleLoopEnd:
 
 .balign 4
 encounterMessage:
-	.asciz "Enemy encountered!\n"
+	.asciz "%s encountered!\n"
 .balign 4
 battleLoopMessage:
 	.asciz "HP: %d     Enemy HP: %d\n"
