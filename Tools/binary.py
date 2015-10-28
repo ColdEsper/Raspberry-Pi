@@ -12,3 +12,20 @@ class BinaryPoint:
 		print(self.binary())
 		print(self.hex())
 		print("bp "+str(-self.bp))
+
+if __name__ == "__main__":
+	import sys
+	if int(sys.version_info[0]) < 3:
+		input = raw_input
+	print("What is the value you wish to convert?")
+	val = input()
+	if val.find("/") != -1:
+		operands= val.split("/")
+		val = float(operands[0])/float(operands[1])
+	else:
+		val = float(val)
+	print("How many bits to left shift?")
+	precision = int(input())
+	bp = BinaryPoint(val,precision)
+	print("Displaying value...")
+	bp.display()
