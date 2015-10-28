@@ -25,7 +25,14 @@ return: .word 0
 .endm
 
 /*returns back to main loop after battle*/
-.macro initBattle
+.macro initBattle Attack, Defense, HP
+	mov R1, #\Attack
+	mov R2, #\Defense
+	push {R1, R2}
+	ldr R0, =(battlers+sizeOfBattler)
+	mov R1, #0
+	mov R2, #0
+	mov R3, #\HP
 	bl initBattler
 	mov R1, R0
 	ldr R0, =battlers
@@ -130,67 +137,25 @@ genEnemy:
 enemyOne:
 	cmp R0, #0
 	bne enemyTwo
-	mov R1, #3
-	mov R2, #2
-	push {R1, R2}
-	ldr R0, =(battlers+sizeOfBattler)
-	mov R1, #0
-	mov R2, #0
-	mov R3, #50
-	initBattle
+	initBattle 3 2 50
 enemyTwo:
 	cmp R0, #1
 	bne enemyThree
-	mov R1, #4
-	mov R2, #2
-	push {R1, R2}
-	ldr R0, =(battlers+sizeOfBattler)
-	mov R1, #0
-	mov R2, #0
-	mov R3, #55
-	initBattle
+	initBattle 4 2 55
 enemyThree:
 	cmp R0, #2
 	bne enemyFour
-	mov R1, #4
-	mov R2, #3
-	push {R1, R2}
-	ldr R0, =(battlers+sizeOfBattler)
-	mov R1, #0
-	mov R2, #0
-	mov R3, #60
-	initBattle
+	initBattle 4 3 60
 enemyFour:
 	cmp R0, #3
 	bne enemyFive
-	mov R1, #5
-	mov R2, #5
-	push {R1, R2}
-	ldr R0, =(battlers+sizeOfBattler)
-	mov R1, #0
-	mov R2, #0
-	mov R3, #67
-	initBattle
+	initBattle 5 5 67
 enemyFive:
 	cmp R0, #4
 	bne enemySix
-	mov R1, #9
-	mov R2, #2
-	push {R1, R2}
-	ldr R0, =(battlers+sizeOfBattler)
-	mov R1, #0
-	mov R2, #0
-	mov R3, #78
-	initBattle
+	initBattle 9 2 78
 enemySix:
-	mov R1, #3
-	mov R2, #10
-	push {R1, R2}
-	ldr R0, =(battlers+sizeOfBattler)
-	mov R1, #0
-	mov R2, #0
-	mov R3, #210
-	initBattle
+	initBattle 3 10 210
 endMainLoop:
 	/*return*/
 	ldr R5, =return
