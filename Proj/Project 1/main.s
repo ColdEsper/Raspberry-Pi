@@ -13,16 +13,8 @@ return: .word 0
 .balign 4
 .text
 .include "battler.s"
+.include "usefulMacros.s"
 	.global main
-
-.macro compareBothCase upperChar, trueBranch 
-	ldr R0, =inputChar
-	ldr R0, [R0]
-	cmp R0, #\upperChar
-	beq \trueBranch
-	cmp R0, #(\upperChar+0x20)
-	beq \trueBranch
-.endm
 
 /*returns back to main loop after battle*/
 .macro initBattle HP, Attack, Defense, Speed, NameAddress
