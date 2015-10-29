@@ -1,5 +1,11 @@
 .data
 
+mapBoundHigh = 25
+
+.balign 4
+/*map is a square that's top left tile or coordinate is (0,0)*/
+map: .skip mapBoundHigh*mapBoundHigh
+
 /* memory allocation for battlers */
 .balign 4
 battlers: .skip sizeOfBattler*2
@@ -34,8 +40,6 @@ return: .word 0
 	b battle
 .endm
 
-mapBoundHigh = 25
-
 main:
 	/* save return address*/
 	ldr R5, =return
@@ -58,8 +62,11 @@ main:
 	bl initBattler
 
 mainLoop:
-	ldr R0, =mainLoopMessage
 	ldr R5, =battlers
+	ldr R0, [R5]
+	cmp R0, #0
+	ble gameOver
+	ldr R0, =mainLoopMessage
 	ldr R3, [R5]
 	add R5, R5, #sizeOfStats
 	ldr R1, [R5]
@@ -152,6 +159,9 @@ enemyFive:
 	initBattle 78 9 2 7 enemyFiveName
 enemySix:
 	initBattle 210 3 10 8 enemySixName
+gameOver:
+	ldr R0, =deathMessage
+	bl printf
 endMainLoop:
 	/*return*/
 	ldr R5, =return
@@ -165,6 +175,8 @@ mainLoopMessage:
 	.ascii "HP: %d\n\n"
 	.ascii "Press r for Right, l for Left, u for Up, or d for down.\n"
 	.asciz "or... Press q to quit\n"
+deathMessage: 
+	.asciz "You have died!\n    GAME OVER!\n\n"
 .balign 4
 mainInputFormat: .asciz "%c"
 
@@ -189,3 +201,6 @@ enemyFourName: .asciz "Enemy V4"
 enemyFiveName: .asciz "Enemy V5"
 .balign 4
 enemySixName: .asciz "Enemy V6"
+
+.byte 0x43, 0x61, 0x73, 0x65, 0x79, 0x20, 0x20, 0x43 
+.byte 0x6F, 0x70, 0x65, 0x6C, 0x61, 0x6E, 0x64, 0x00

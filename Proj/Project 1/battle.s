@@ -26,6 +26,14 @@ battle:
 	ldr R1, [R1]
 	bl printf
 battleLoop:
+	mov R0, R5
+	ldr R0, [R0]
+	mov R1, R6
+	ldr R1, [R1]
+	cmp R1, #0
+	ble battleLoopEnd
+	cmp R0, #0
+	ble battleLoopEnd
 	ldr R0, =battleLoopMessage
 	ldr R1, [R5]
 	ldr R2, [R6]
