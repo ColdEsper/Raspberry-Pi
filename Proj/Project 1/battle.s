@@ -43,10 +43,32 @@ attackEnemy:
 	mov R0, R5
 	mov R1, R6
 	bl attack
+	mov R1, R5
+	mov R0, R6
+	bl attack
 	b battleLoop
 run:
 	mov R0, R5
+	ldr R0, [R0,#12]
 	mov R1, R6
+	ldr R1, [R1,#12]
+	cmp R0, R1
+	bhi runSuccess
+	bl rand
+	mov R1, #100
+	bl mod
+	/* 20 percent chance of running when slower*/
+	cmp R0, #20
+	blo runSuccess
+	ldr R0, =runFailMsg
+	bl printf
+	mov R1, R5
+	mov R0, R6
+	bl attack
+	b battleLoop
+runSuccess:
+	ldr R0, =runSuccessMsg
+	bl printf
 battleLoopEnd:
 	/*return*/
 	ldr R5, =return
@@ -65,6 +87,8 @@ battleLoopMessage:
 	.asciz "Which option do you choose?\n"
 .balign 4
 inputFormat: .asciz "%c"
+runFailMsg: .asciz "You couldn't escape!\n"
+runSuccessMsg: .asciz "You ran away!\n"
 
 .global printf
 .global scanf
