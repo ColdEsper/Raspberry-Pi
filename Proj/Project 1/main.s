@@ -53,6 +53,12 @@ main:
 	mov R0, #0
 	bl time
 	bl srand
+	/* initialize map*/
+	ldr R0, =map
+	/* ASCII '^' */
+	mov R1, #0x5E
+	ldr R2, =(mapBoundHigh*mapBoundHigh)
+	bl mapInit
 	/* initializes main player*/
 	mov R1, #100
 	mov R2, #51
@@ -64,18 +70,39 @@ main:
 	mov R2, #12
 	ldr R3, =playerName
 	bl initBattler
+	ldr R0, =(battlers+sizeOfStats)
+	mov R1, #mapBoundHigh
+	bl mapCoordinateToIndex
+	ldr R1, =map
+	add R1, R1, R0
+	/*load map bytes for later inclusive or*/
+	ldr R2, [R1]
+	lsl R2, #8
+	lsr R2, #8
+	/* player represented by 'Y' */
+	mov R3, #0x59
+	lsl R3, #24
+	/*keep map bytes since registers are 4 bytes*/
+	orr R3, R2
+	str R3, [R1]
 
 mainLoop:
 	ldr R5, =battlers
 	ldr R0, [R5]
 	cmp R0, #0
 	ble gameOver
-	ldr R0, =mainLoopMessage
+	ldr R0, =mainLoopStatusMessage
 	ldr R3, [R5]
 	add R5, R5, #sizeOfStats
 	ldr R1, [R5]
 	add R5, R5, #(sizeOfCoord/2)
 	ldr R2, [R5]
+	bl printf
+	ldr R0, =map
+	mov R1, #mapBoundHigh
+	ldr R2, =(mapBoundHigh*mapBoundHigh)
+	bl mapDisplay
+	ldr R0, =mainLoopControlsMessage
 	bl printf
 	ldr R0, =mainInputFormat
 	ldr R1, =inputChar
@@ -178,10 +205,11 @@ endMainLoop:
 
 /*constants*/
 .balign 4
-mainLoopMessage: 
+mainLoopStatusMessage: 
 	.ascii "Position: (%d,%d)\n"
-	.ascii "HP: %d\n\n"
-	.ascii "Press r for Right, l for Left, u for Up, or d for down.\n"
+	.asciz "HP: %d\n"
+mainLoopControlsMessage:
+	.ascii "\nPress r for Right, l for Left, u for Up, or d for down.\n"
 	.asciz "or... Press q to quit\n"
 deathMessage: 
 	.asciz "You have died!\n    GAME OVER!\n\n"
