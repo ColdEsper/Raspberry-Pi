@@ -13,10 +13,10 @@ attack:
 	/*Attack*/
 	ldr R0, [R0,#4]
 	cmp R0, R3
-	bhs oneDamage
+	bls oneDamage
 /*normal damage calculation*/
-	sub R3, R3, R0
-	sub R2, R2, R3
+	sub R0, R0, R3
+	sub R2, R2, R0
 	b attackReturn
 oneDamage:
 	mov R3, #1

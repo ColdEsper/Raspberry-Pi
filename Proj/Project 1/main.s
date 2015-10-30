@@ -51,7 +51,7 @@ main:
 	bl srand
 	/* initializes main player*/
 	mov R1, #100
-	mov R2, #7
+	mov R2, #51
 	mov R3, #5
 	mov R0, #6
 	push {R0, R1, R2, R3}
@@ -140,25 +140,25 @@ genEnemy:
 enemyOne:
 	cmp R0, #0
 	bne enemyTwo
-	initBattle 50 3 2 5 enemyOneName
+	initBattle 50 11 2 5 enemyOneName
 enemyTwo:
 	cmp R0, #1
 	bne enemyThree
-	initBattle 55 4 2 5 enemyTwoName
+	initBattle 55 12 2 5 enemyTwoName
 enemyThree:
 	cmp R0, #2
 	bne enemyFour
-	initBattle 60 4 3 5 enemyThreeName
+	initBattle 60 13 3 5 enemyThreeName
 enemyFour:
 	cmp R0, #3
 	bne enemyFive
-	initBattle 67 5 5 6 enemyFourName
+	initBattle 67 15 5 6 enemyFourName
 enemyFive:
 	cmp R0, #4
 	bne enemySix
-	initBattle 78 9 2 7 enemyFiveName
+	initBattle 78 17 2 7 enemyFiveName
 enemySix:
-	initBattle 210 3 10 8 enemySixName
+	initBattle 210 35 10 8 enemySixName
 gameOver:
 	ldr R0, =deathMessage
 	bl printf
