@@ -101,5 +101,32 @@ mapCoordinateToIndex:
 	ldr LR, [LR]
 	bx LR
 
+.global mapSwapCoordinates
+/*args:
+	R0 is pointer to coordinate
+	R1 is pointer to other coordinate
+	R2 is map width*/
+mapSwapCoordinates:
+	ldr R3, =return
+	str LR, [R3]
+	ldr R3, =mapWidth
+	str R2, [R3]
+	mov R4, R1
+	mov R1, R2
+	bl mapCoordinateToIndex
+	mov R3, R0
+	mov R0, R4
+	mov R4, R3
+	ldr R1, =mapWidth
+	ldr R1, [R1]
+	bl mapCoordinateToIndex
+	ldr R2, [R4]
+	ldr R1, [R0]
+	str R2, [R0]
+	str R1, [R4]
+	ldr LR, =return
+	ldr LR, [LR]
+	bx LR
+
 mapSquareMessage: .asciz "%c"
 newLineMessage: .asciz "\n"

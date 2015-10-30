@@ -43,6 +43,19 @@ return: .word 0
 	ldr LR, =mainLoop
 	b battle
 .endm
+.macro moveSwapMapBytes difference
+	ldr R0, =(battlers+sizeOfStats)
+	mov R1, #mapBoundHigh
+	bl mapCoordinateToIndex
+	ldr R1, =map
+	add R0, R0, R1
+	add R2, R0, #\difference
+	#swap characters in map
+	ldr R1, [R0]
+	ldr R3, [R2]
+	str R1, [R2]
+	str R3, [R0]
+.endm
 
 main:
 	/* save return address*/
@@ -130,6 +143,7 @@ moveLeft:
 	cmp R3, R1
 	bhi mainLoop
 	str R3, [R2]
+	moveSwapMapBytes 1
 	b chanceEncounter
 moveRight:
 	ldr R2, =(battlers+sizeOfStats)
@@ -138,16 +152,18 @@ moveRight:
 	cmp R3, #mapBoundHigh
 	bhi mainLoop
 	str R3, [R2]
+	moveSwapMapBytes (-1)
 	b chanceEncounter
-moveUp:
+moveDown:
 	ldr R2, =(battlers+sizeOfStats+sizeOfCoord/2)
 	ldr R1, [R2]
 	add R3, R1, #1
 	cmp R3, #mapBoundHigh
 	bhi mainLoop
 	str R3, [R2]
+	moveSwapMapBytes (-mapBoundHigh)
 	b chanceEncounter
-moveDown:
+moveUp:
 	ldr R2, =(battlers+sizeOfStats+sizeOfCoord/2)
 	ldr R1, [R2]
 	sub R3, R1, #1
@@ -155,6 +171,7 @@ moveDown:
 	cmp R3, R1
 	bhi mainLoop
 	str R3, [R2]
+	moveSwapMapBytes mapBoundHigh
 	b chanceEncounter
 chanceEncounter:
 	bl rand
