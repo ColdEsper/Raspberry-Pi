@@ -1,5 +1,9 @@
 .data
 
+.global score 
+.balign 4
+score: .word 0
+
 mapBoundHigh = 25
 
 .balign 4
@@ -163,6 +167,10 @@ gameOver:
 	ldr R0, =deathMessage
 	bl printf
 endMainLoop:
+	ldr R0, =scoreMessage
+	ldr R1, =score
+	ldr R1, [R1]
+	bl printf
 	/*return*/
 	ldr R5, =return
 	ldr LR, [R5]
@@ -177,6 +185,8 @@ mainLoopMessage:
 	.asciz "or... Press q to quit\n"
 deathMessage: 
 	.asciz "You have died!\n    GAME OVER!\n\n"
+scoreMessage: 
+	.asciz "You survived %d battles.\n"
 .balign 4
 mainInputFormat: .asciz "%c"
 

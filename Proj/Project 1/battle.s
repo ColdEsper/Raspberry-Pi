@@ -78,6 +78,10 @@ runSuccess:
 	ldr R0, =runSuccessMsg
 	bl printf
 battleLoopEnd:
+	ldr R0, =score
+	ldr R1, [R0]
+	add R1, R1, #1 
+	str R1, [R0]
 	/*return*/
 	ldr R5, =return
 	ldr LR, [R5]
