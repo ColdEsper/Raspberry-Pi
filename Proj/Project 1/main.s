@@ -88,6 +88,9 @@ main:
 	bl mapCoordinateToIndex
 	ldr R1, =map
 	add R1, R1, R0
+	/*shifts map pointer over 3 bytes so write places
+	  'Y' in correct byte*/
+	sub R1, R1, #3
 	/*load map bytes for later inclusive or*/
 	ldr R2, [R1]
 	lsl R2, #8
@@ -149,7 +152,7 @@ moveRight:
 	ldr R2, =(battlers+sizeOfStats)
 	ldr R1, [R2]
 	add R3, R1, #1
-	cmp R3, #mapBoundHigh
+	cmp R3, #(mapBoundHigh-1)
 	bhi mainLoop
 	str R3, [R2]
 	moveSwapMapBytes (-1)
@@ -158,7 +161,7 @@ moveDown:
 	ldr R2, =(battlers+sizeOfStats+sizeOfCoord/2)
 	ldr R1, [R2]
 	add R3, R1, #1
-	cmp R3, #mapBoundHigh
+	cmp R3, #(mapBoundHigh-1)
 	bhi mainLoop
 	str R3, [R2]
 	moveSwapMapBytes (-mapBoundHigh)
