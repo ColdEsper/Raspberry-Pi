@@ -234,7 +234,7 @@ mainLoopControlsMessage:
 deathMessage: 
 	.asciz "You have died!\n    GAME OVER!\n\n"
 scoreMessage: 
-	.asciz "You survived %d battles.\n"
+	.asciz "You entered %d battles.\n"
 .balign 4
 mainInputFormat: .asciz "%c"
 
