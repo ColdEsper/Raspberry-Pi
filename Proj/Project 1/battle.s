@@ -104,5 +104,5 @@ runSuccessMsg: .asciz "You ran away!\n"
 
 .global printf
 .global scanf
-.global getChar
+.global getchar
 .global rand

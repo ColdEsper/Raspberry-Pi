@@ -240,7 +240,7 @@ mainInputFormat: .asciz "%c"
 
 .global printf
 .global scanf
-.global getChar
+.global getchar
 .global srand
 .global rand
 .global time
