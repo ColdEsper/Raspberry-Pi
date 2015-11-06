@@ -5,12 +5,12 @@ main:
 	ldr R0, =askTermMsg
 	bl printf
 	ldr R0, =inputTermFormat
-	sub SP, #4
+	sub SP, #8
 	mov R1, SP
 	bl scanf
 	bl getchar
 	ldr R0, [SP]
-	add SP, #4
+	add SP, #8
 	bl fibonacci
 	mov R1, R0
 	ldr R0, =printMsg

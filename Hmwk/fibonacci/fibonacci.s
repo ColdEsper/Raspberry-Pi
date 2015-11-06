@@ -10,8 +10,7 @@ fibonacci:
 	sub SP, #8
 	str R0, [SP]
 	/*push previous terms as both 1*/
-	sub SP, #8
-	str R1, [SP]
+	str R1, [SP,#4]
 	sub SP, #8
 	str R1, [SP]
 /*args: 
@@ -22,8 +21,7 @@ fibonacciRecur:
 	/*pop args*/
 	ldr R2, [SP]
 	add SP, #8
-	ldr R1, [SP]
-	add SP, #8
+	ldr R1, [SP,#4]
 	ldr R0, [SP]
 	add SP, #8
 	/*push LR*/
@@ -39,8 +37,7 @@ fibonacciRecur:
 	/*push args for next recursion*/
 	sub SP, #8
 	str R0, [SP]
-	sub SP, #8
-	str R1, [SP]
+	str R1, [SP,#4]
 	sub SP, #8
 	str R2, [SP]
 	bl fibonacciRecur
