@@ -1,7 +1,3 @@
-.data
-array: .skip 4*45
-
-.balign 4
 .text
 .global main
 
