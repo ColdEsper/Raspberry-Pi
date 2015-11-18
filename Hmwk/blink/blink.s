@@ -102,7 +102,7 @@ forLoop:
         mov     r1, #0
         bl      digitalWrite
 
-@       delay(i*30)               ;
+@       delay(i*35)               ;
         mov r0, #35
 	add r4, r4, #1
         mul r0, r0, r4
@@ -115,7 +115,7 @@ forLoop:
         mov     r1, #1
         bl      digitalWrite
        
-@       delay(i*30)               ;
+@       delay(i*35)               ;
         mov r0, #35
 	add r4, r4, #1
         mul r0, r0, r4
