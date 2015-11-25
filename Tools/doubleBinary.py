@@ -47,7 +47,7 @@ while len(result) < 52-power:
 		result+="1"
 	else:
 		result+="0"
-	print("  binary: "+result[-1:-5:-1])
+	print("  binary: "+result[-4::])
 	val -= clip
 while result[0] != '1':
 	result = result[1:]
