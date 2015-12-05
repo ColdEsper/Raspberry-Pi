@@ -39,36 +39,29 @@ int squareRoot (int value) {
 
 int main () {
 	/* bp -32*/
-	//unsigned int weight = 0x19eb851e;
+	unsigned int weight = 0x19eb851e;
 	/* bp -16*/
-	unsigned int weight = 0x19eb;
 	unsigned int coefficient = 0x8000;
-	//2^-14/4=2^-16
-	unsigned int area = (0.14*0.14*PI*2*2*2*2*2*2*2*2*2*2*2*2*2*2);
-	printf("area %d\n",area);
+	//bp = 2^-22/4=2^-24
+	//so area = (0.14*0.14*PI*2**(bp-2))
+	unsigned int area = 258265;
 	unsigned int density = 0x9b;
 	unsigned int terminalVelocity;
 	unsigned int velocityDenominator;
 
 	velocityDenominator = density*area;
-	printf("denomb %d\n", velocityDenominator);
-	//denominator at bp -16-16 = -32, so shift right to -16
+	//denominator at bp -24-16 = -40, so shift right to -24
 	velocityDenominator>>=16;
 	velocityDenominator*=coefficient;
-	printf("denomc %d\n", velocityDenominator);
-	//denominator at bp -16-16=-32, so shift right to -24
-	//velocityDenominator>>=8;
+	//denominator at bp -24-16=-40, so shift right to -24
 	velocityDenominator>>=16;
-	printf("denom %d\n", velocityDenominator);
 	//move out 2 from calculation as part of binary point shifting
-	terminalVelocity = 2*weight/velocityDenominator;
-	printf("bvelocity %d\n",terminalVelocity);
+	terminalVelocity = weight/velocityDenominator;
 	//terminal velocity bp now at 1-32+24= -7
-	//terminal velocity bp now at 1-16+16= -1
-	printf("vvelocity %d\n",terminalVelocity);
-	terminalVelocity = squareRoot(terminalVelocity);
-	//terminalVelocity bp now at -4, so shift right to 0
-	//terminalVelocity>>=4;
+	terminalVelocity>>=1;
+	terminalVelocity = sqrt(terminalVelocity);
+	//terminalVelocity bp now at -3, so shift right to 0
+	terminalVelocity>>=3;
 	printf("Final velocity is %d\n",terminalVelocity);
 
 	return 0;

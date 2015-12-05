@@ -1,4 +1,4 @@
 all:
-	gcc -o cscaledTerminalVelocity scaledTerminalVelocity.c
+	gcc -o cscaledTerminalVelocity scaledTerminalVelocity.c -lm
 	gcc -o cterminalVelocity terminalVelocity.c -lm
 
