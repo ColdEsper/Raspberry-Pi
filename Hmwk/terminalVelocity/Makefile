@@ -7,4 +7,5 @@ all:
 	gcc -o scaledPseudoAsm scaledPseudoAsm.c
 	gcc -g -o newtonScaledVelocity newtonScaledVelocity.s mod.o div.o
 	gcc -o floatPseudoAsm floatPseudoAsm.c -lm
+	gcc -g -o terminalVelocity terminalVelocity.s
 
