@@ -8,24 +8,21 @@
  */
 
 int squareRoot (unsigned int value) {
+	printf("val %d\n",value);
 	unsigned int xGuess = value/2;
+	while (xGuess*xGuess < xGuess) {
+		xGuess = xGuess/2;
+	}
 	unsigned int xNext = 0;
-	unsigned int deltaX = 255;
-	int sign = 0;
-	while (deltaX > 0) {
-		xNext = xGuess - (xGuess*xGuess-value)/(2*xGuess);
-		if (xNext >= xGuess) {
-			deltaX = xNext-xGuess;
-			if (deltaX < 4 && sign != 1) {
-				break;
-			}
-			sign = 1;
-		} else {
-			deltaX = xGuess-xNext;
-			if (deltaX < 4 && sign != -1) {
-				break;
-			}
-			sign = -1;
+	unsigned int prev = 0;
+	unsigned int prevTwo = 0;
+	while (1) {
+		xNext = (xGuess+value/xGuess)/2;
+		prevTwo = prev;
+		prev=xGuess;
+		//try to prevent jumping back and forth
+		if (xNext == prev || xNext == prevTwo) {
+			break;
 		}
 		xGuess = xNext;
 	}
