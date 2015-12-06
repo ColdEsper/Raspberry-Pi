@@ -1,5 +1,4 @@
 #include<stdio.h>
-#include<math.h>
 
 /* For problem:
  * diameter = 0.14 ft
@@ -7,6 +6,31 @@
  * coefficient of drag = .5
  * density of air = .0023679
  */
+
+int squareRoot (unsigned int value) {
+	unsigned int xGuess = value/2;
+	unsigned int xNext = 0;
+	unsigned int deltaX = 255;
+	int sign = 0;
+	while (deltaX > 0) {
+		xNext = xGuess - (xGuess*xGuess-value)/(2*xGuess);
+		if (xNext >= xGuess) {
+			deltaX = xNext-xGuess;
+			if (deltaX < 4 && sign != 1) {
+				break;
+			}
+			sign = 1;
+		} else {
+			deltaX = xGuess-xNext;
+			if (deltaX < 4 && sign != -1) {
+				break;
+			}
+			sign = -1;
+		}
+		xGuess = xNext;
+	}
+	return xNext;
+}
 
 int main () {
 	/* bp -32*/
@@ -31,7 +55,7 @@ int main () {
 	terminalVelocity = weight/velocityDenominator;
 	//terminal velocity bp now at 1-32+24= -7
 	terminalVelocity>>=1;
-	terminalVelocity = sqrt(terminalVelocity);
+	terminalVelocity = squareRoot(terminalVelocity);
 	//1/2 factored out into shifting bp
 	dynamicPressure=density*terminalVelocity*terminalVelocity;
 	//terminalVelocity bp at -3 from sqrt, so shift right to 0

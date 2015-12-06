@@ -17,7 +17,7 @@ if __name__=="__main__":
 	print("What is the coefficient of drag of the object?")
 	coefficient = float(input())
 	print("What is the area of the object?")
-	area = (float(input())
+	area = float(input())
 	print("What is the density of the object?")
 	density = float(input())
 	velocity = sqrt((2*weight)/(coefficient*density*area))
