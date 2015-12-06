@@ -6,4 +6,5 @@ all:
 	gcc -o cnewtonScaledVelocity newtonScaledVelocity.c 
 	gcc -o scaledPseudoAsm scaledPseudoAsm.c
 	gcc -g -o newtonScaledVelocity newtonScaledVelocity.s mod.o div.o
+	gcc -o floatPseudoAsm floatPseudoAsm.c -lm
 
