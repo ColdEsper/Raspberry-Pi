@@ -1,0 +1,14 @@
+           On Raspberry
+part    executable                time
+2       cterminalVelocity         66  seconds
+3       cscaledTerminalVelocity   78  seconds
+4       cnewtonScaledVelocity     398 seconds
+4       scaledPseudoAsm           784 seconds
+5       newtonScaledVelocity      675 seconds
+6       floatPseudoAsm            83  seconds
+7       terminalVelocity          31  seconds
+
+4 vs 6 was 398 seconds vs 83 seconds, so part 6 was over four times faster than part 4
+
+5 vs 7 was 675 seconds vs 31 seconds, so part 7 was over twenty times faster than part 5
+
