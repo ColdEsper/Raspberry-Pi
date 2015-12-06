@@ -20,7 +20,7 @@ int main () {
 	float area;
 
 	area = (diameter*diameter*PI)/4.0f;
-	terminalVelocity = sqrt((double)((2.0f*weight)/(density*area*coefficient)));
+	terminalVelocity = sqrt((2.0f*weight)/(density*area*coefficient));
 	printf("Final velocity is %f\n",terminalVelocity);
 	dynamicPressure = 0.5*density*terminalVelocity*terminalVelocity;
 	printf("Dynamic pressure is %f\n",dynamicPressure);

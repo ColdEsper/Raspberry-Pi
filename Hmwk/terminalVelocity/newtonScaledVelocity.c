@@ -8,7 +8,6 @@
  */
 
 int squareRoot (unsigned int value) {
-	printf("val %d\n",value);
 	unsigned int xGuess = value/2;
 	while (xGuess*xGuess < xGuess) {
 		xGuess = xGuess/2;
@@ -57,10 +56,10 @@ int main () {
 	dynamicPressure=density*terminalVelocity*terminalVelocity;
 	//terminalVelocity bp at -3 from sqrt, so shift right to 0
 	terminalVelocity>>=3;
-	printf("Final velocity is %d\n",terminalVelocity);
+	printf("Final velocity is %i\n",terminalVelocity);
 	//dynamicPressure bp =-1-16-3-3=-23, so shift right to 0
 	dynamicPressure>>=23;
-	printf("Dynamic pressure is %d\n",dynamicPressure);
+	printf("Dynamic pressure is %i\n",dynamicPressure);
 
 	return 0;
 }
