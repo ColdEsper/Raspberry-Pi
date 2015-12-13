@@ -26,6 +26,7 @@ battle:
 	ldr R1, [R1]
 	bl printf
 battleLoop:
+	/*check if enemy and player are still alive*/
 	mov R0, R5
 	ldr R0, [R0]
 	mov R1, R6
@@ -34,6 +35,7 @@ battleLoop:
 	ble battleLoopEnd
 	cmp R0, #0
 	ble battleLoopEnd
+	/*display battle menu*/
 	ldr R0, =battleLoopMessage
 	ldr R1, [R5]
 	ldr R2, [R6]
@@ -42,9 +44,9 @@ battleLoop:
 	ldr R1, =inputChar
 	bl scanf
 	bl getchar
-	/* compare to A */
+	/* compare input to A */
 	compareBothCase 0x41 attackEnemy
-	/* compare to B */
+	/* compare input to B */
 	compareBothCase 0x42 run
 	b battleLoop
 attackEnemy:
@@ -56,11 +58,13 @@ attackEnemy:
 	bl attack
 	b battleLoop
 run:
+	/*compare speed*/
 	mov R0, R5
-	ldr R0, [R0,#12]
+	vldr S0, [R0,#12]
 	mov R1, R6
-	ldr R1, [R1,#12]
-	cmp R0, R1
+	vldr S1, [R1,#12]
+	vcmp.f32 S0, S1
+	vmrs APSR_nzcv, FPSCR
 	bhi runSuccess
 	bl rand
 	mov R1, #100
