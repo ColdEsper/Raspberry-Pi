@@ -16,7 +16,7 @@ int main () {
 	unsigned int coefficient = 0x8000;
 	unsigned int density = 0x9b;
 	//bp = 2^-22/4=2^-24
-	//so area = (0.14*0.14*PI*2**(bp-2))
+	//so area = (0.14*0.14*PI*2^(bp-2))
 	unsigned int area = 258265;
 	unsigned int terminalVelocity;
 	unsigned int velocityDenominator;
