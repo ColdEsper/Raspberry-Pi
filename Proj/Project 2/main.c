@@ -16,7 +16,7 @@ struct Stats {
 	int hp;
 	int attack;
 	int defense;
-	int speed;
+	float speed;
 };
 
 struct Battler {
@@ -84,7 +84,7 @@ void battle (struct Battler* player,struct Battler* enemy) {
 }
 
 void initBattle (struct Battler* player, int hp, int attack, 
-		int defense, int speed, const char* name) {
+		int defense, float speed, const char* name) {
 	struct Battler enemy;
 	enemy.stats.hp = hp;
 	enemy.stats.attack = attack;
@@ -100,22 +100,22 @@ void chanceEncounter (struct Battler* player) {
 		odds = rand() % 6;
 		switch(odds) {
 			case 0:
-				initBattle(player,50,11,2,5,"Enemy V1");
+				initBattle(player,50,11,2,5.0f,"Enemy V1");
 				break;
 			case 1:
-				initBattle(player,55,12,2,5,"Enemy V2");
+				initBattle(player,55,12,2,5.1f,"Enemy V2");
 				break;
 			case 2:
-				initBattle(player,60,13,3,5,"Enemy V3");
+				initBattle(player,60,13,3,5.2f,"Enemy V3");
 				break;
 			case 3:
-				initBattle(player,67,15,5,6,"Enemy V4");
+				initBattle(player,67,15,5,6.0f,"Enemy V4");
 				break;
 			case 4:
-				initBattle(player,78,17,2,7,"Enemy V5");
+				initBattle(player,78,17,2,7.0f,"Enemy V5");
 				break;
 			case 5:
-				initBattle(player,210,35,10,8,"Enemy V6");
+				initBattle(player,210,35,10,8.0f,"Enemy V6");
 				break;
 		}
 	}
@@ -132,7 +132,7 @@ int main() {
 	player.stats.hp = 100;
 	player.stats.attack = 51;
 	player.stats.defense = 5;
-	player.stats.speed = 6;
+	player.stats.speed = 6.0f;
 	player.pos.x = 12;
 	player.pos.y = 12;
 	map[player.pos.x+MAP_WIDTH*player.pos.y]='Y';
