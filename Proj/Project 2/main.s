@@ -76,7 +76,8 @@ main:
 	mov R1, #100
 	mov R2, #51
 	mov R3, #5
-	mov R0, #6
+	/*load float 6.0f*/
+	ldr R0, =0x40C00000
 	push {R0, R1, R2, R3}
 	ldr R0, =battlers
 	mov R1, #12
@@ -191,25 +192,31 @@ genEnemy:
 enemyOne:
 	cmp R0, #0
 	bne enemyTwo
-	initBattle 50 11 2 5 enemyOneName
+	/*50, 11, 2, 5.0*/
+	initBattle 50 11 2 0x40A00000 enemyOneName
 enemyTwo:
 	cmp R0, #1
 	bne enemyThree
-	initBattle 55 12 2 5 enemyTwoName
+	/*55, 12, 2, 5.1*/
+	initBattle 55 12 2 0x40A33333 enemyTwoName
 enemyThree:
 	cmp R0, #2
 	bne enemyFour
-	initBattle 60 13 3 5 enemyThreeName
+	/*60, 13, 3, 5.2*/
+	initBattle 60 13 3 0x40A66666 enemyThreeName
 enemyFour:
 	cmp R0, #3
 	bne enemyFive
-	initBattle 67 15 5 6 enemyFourName
+	/*60, 13, 3, 6.0*/
+	initBattle 67 15 0x40C00000  enemyFourName
 enemyFive:
 	cmp R0, #4
 	bne enemySix
-	initBattle 78 17 2 7 enemyFiveName
+	/*78, 17, 2, 7.0*/
+	initBattle 78 17 2 0x40E00000 enemyFiveName
 enemySix:
-	initBattle 210 35 10 8 enemySixName
+	/*210, 35, 10, 8.0*/
+	initBattle 210 35 10 0x41000000  enemySixName
 gameOver:
 	ldr R0, =deathMessage
 	bl printf

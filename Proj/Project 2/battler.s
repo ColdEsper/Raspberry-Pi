@@ -11,7 +11,7 @@ sizeOfCoord=8
 	1 word HP
 	1 word Attack 
 	1 word Defense 
-	1 word Speed */
+	1 float Speed */
 sizeOfStats=16
 /* battler structure layout
    1 stats 
