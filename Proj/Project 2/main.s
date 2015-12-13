@@ -28,10 +28,10 @@ return: .word 0
 
 /*returns back to main loop after battle*/
 .macro initBattle HP, Attack, Defense, Speed, NameAddress
-	mov R1, #\HP
-	mov R2, #\Attack
-	mov R3, #\Defense
-	mov R0, #\Speed
+	ldr R1, =\HP
+	ldr R2, =\Attack
+	ldr R3, =\Defense
+	ldr R0, =\Speed
 	push {R0, R1, R2, R3}
 	ldr R0, =(battlers+sizeOfBattler)
 	mov R1, #0
@@ -208,7 +208,7 @@ enemyFour:
 	cmp R0, #3
 	bne enemyFive
 	/*60, 13, 3, 6.0*/
-	initBattle 67 15 0x40C00000  enemyFourName
+	initBattle 60 13 3 0x40C00000  enemyFourName
 enemyFive:
 	cmp R0, #4
 	bne enemySix
