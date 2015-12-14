@@ -50,11 +50,28 @@ battleLoop:
 	compareBothCase 0x42 run
 	b battleLoop
 attackEnemy:
-	mov R0, R5
-	mov R1, R6
+	/*compare speed*/
+	vldr S0, [R0,#12]
+	vldr S1, [R1,#12]
+	vcmp.f32 S0, S1
+	vmrs APSR_nzcv, FPSCR
+	/*player attacks first if faster*/
+	movge R0, R5
+	movge R1, R6
+	/*else enemy attacks first*/
+	movlt R1, R5
+	movlt R0, R6
+	push {R0, R1}
 	bl attack
-	mov R1, R5
-	mov R0, R6
+	pop {R0, R1}
+	/*checks if receiver of attack died*/
+	ldr R2, [R1]
+	cmp R2, #0
+	ble battleLoopEnd
+	/*counter attack if alive*/
+	mov R2, R0
+	mov R0, R1
+	mov R1, R2
 	bl attack
 	b battleLoop
 run:

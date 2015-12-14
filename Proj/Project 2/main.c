@@ -55,8 +55,17 @@ void battle (struct Battler* player,struct Battler* enemy) {
 		switch(choice) {
 			case 'a':
 			case 'A':
-				attack(player,enemy);
-				attack(enemy,player);
+				if (player->stats.speed > enemy->stats.speed) {
+					attack(player,enemy);
+					if (enemy->stats.hp > 0) {
+						attack(enemy,player);
+					}
+				} else {
+					attack(enemy,player);
+					if (player->stats.hp > 0) {
+						attack(player,enemy);
+					}
+				}
 				break;
 			case 'b':
 			case 'B':
