@@ -51,8 +51,8 @@ battleLoop:
 	b battleLoop
 attackEnemy:
 	/*compare speed*/
-	vldr S0, [R0,#12]
-	vldr S1, [R1,#12]
+	vldr S0, [R5,#12]
+	vldr S1, [R6,#12]
 	vcmp.f32 S0, S1
 	vmrs APSR_nzcv, FPSCR
 	/*player attacks first if faster*/
