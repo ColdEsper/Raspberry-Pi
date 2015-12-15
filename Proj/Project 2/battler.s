@@ -8,9 +8,9 @@
 	1 word Y*/
 sizeOfCoord=8
 /* stats structure
-	1 word HP
-	1 word Attack 
-	1 word Defense 
+	1 float HP
+	1 float Attack 
+	1 float Defense 
 	1 float Speed */
 sizeOfStats=16
 /* battler structure layout

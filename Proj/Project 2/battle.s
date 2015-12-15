@@ -27,19 +27,27 @@ battle:
 	bl printf
 battleLoop:
 	/*check if enemy and player are still alive*/
-	mov R0, R5
-	ldr R0, [R0]
-	mov R1, R6
-	ldr R1, [R1]
-	cmp R1, #0
+	vldr S1, [R6]
+	vcmp.f32 S1, #0
+	vmrs APSR_nzcv, FPSCR
 	ble battleLoopEnd
-	cmp R0, #0
+	vldr S0, [R5]
+	vcmp.f32 S0, #0
+	vmrs APSR_nzcv, FPSCR
 	ble battleLoopEnd
 	/*display battle menu*/
 	ldr R0, =battleLoopMessage
-	ldr R1, [R5]
-	ldr R2, [R6]
+	/*push enemy hp onto stack for printf due to calling
+	 convention only using up to R4*/
+	vldr S0, [R6]
+	vcvt.f64.f32 D1, S0
+	vmov R2, R3, D1
+	push {R2, R3}
+	vldr S0, [R5]
+	vcvt.f64.f32 D1, S0
+	vmov R2, R3, D1
 	bl printf
+	pop {R2, R3}
 	ldr R0, =inputFormat
 	ldr R1, =inputChar
 	bl scanf
@@ -65,8 +73,9 @@ attackEnemy:
 	bl attack
 	pop {R0, R1}
 	/*checks if receiver of attack died*/
-	ldr R2, [R1]
-	cmp R2, #0
+	vldr S0, [R1]
+	vcmp.f32 S0, #0
+	vmrs APSR_nzcv, FPSCR
 	ble battleLoopEnd
 	/*counter attack if alive*/
 	mov R2, R0
@@ -82,7 +91,7 @@ run:
 	vldr S1, [R1,#12]
 	vcmp.f32 S0, S1
 	vmrs APSR_nzcv, FPSCR
-	bhi runSuccess
+	bgt runSuccess
 	bl rand
 	mov R1, #100
 	bl mod
@@ -113,7 +122,7 @@ encounterMessage:
 	.asciz "%s encountered!\n"
 .balign 4
 battleLoopMessage:
-	.ascii "HP: %d     Enemy HP: %d\n"
+	.ascii "HP: %f     Enemy HP: %f\n"
 	.ascii "--------------------------\n"
 	.ascii "| a)Attack    b)Run      |\n"
 	.ascii "--------------------------\n"

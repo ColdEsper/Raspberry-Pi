@@ -1,26 +1,41 @@
 .balign 4
 .text
 
+.include "battler.s"
+
 .global attack
 /*args
    R0 is pointer to attacker
    R1 is pointer to receiver*/
 attack:
+	push {R2, LR}
 	/*HP*/
-	ldr R2, [R1]
+	vldr S0, [R1]
 	/*Defense*/
-	ldr R3, [R1,#8]
+	vldr S1, [R1,#8]
 	/*Attack*/
-	ldr R0, [R0,#4]
-	cmp R0, R3
-	bls oneDamage
-/*normal damage calculation*/
-	sub R0, R0, R3
-	sub R2, R2, R0
+	vldr S2, [R0,#4]
+	vcmp.f32 S2, S1
+	vmrs APSR_nzcv, FPSCR
+	blt oneDamage
+	/*normal damage calculation*/
+	vsub.f32 S3, S2, S1
+	vsub.f32 S0, S0, S3
 	b attackReturn
 oneDamage:
-	mov R3, #1
-	sub R2, R2, R3
+	/*subtract 1.0 health*/
+	mov R2, #0x3f800000
+	vmov S3, R2
+	vsub.f32 S0, S0, S3
 attackReturn:
-	str R2, [R1]
+	vstr S0, [R1]
+	ldr R2, [R1,#(sizeOfStats+sizeOfCoord)]
+	ldr R1, [R0,#(sizeOfStats+sizeOfCoord)]
+	ldr R0, =attackMsg
+	
+	bl printf
+	pop {R2, LR}
 	bx LR
+
+attackMsg:
+.asciz "%s attacked %s!\n"

@@ -73,13 +73,29 @@ main:
 	ldr R2, =(mapBoundHigh*mapBoundHigh)
 	bl mapInit
 	/* initializes main player*/
+	/*HP*/
 	mov R1, #100
+	vmov S1, R1
+	vcvt.f32.u32 S0, S1
+	vmov R1, S0
+	/*Attack*/
 	mov R2, #51
+	vmov S1, R2
+	vcvt.f32.u32 S0, S1
+	vmov R2, S0
+	/*Defense*/
 	mov R3, #5
-	/*load float 6.0f*/
-	ldr R0, =0x40C00000
+	vmov S1, R3
+	vcvt.f32.u32 S0, S1
+	vmov R3, S3
+	/*Speed*/
+	mov R0, #6
+	vmov S1, R0
+	vcvt.f32.u32 S0, S1
+	vmov R0, S0
 	push {R0, R1, R2, R3}
 	ldr R0, =battlers
+	/*Position*/
 	mov R1, #12
 	mov R2, #12
 	ldr R3, =playerName
@@ -104,17 +120,24 @@ main:
 	str R3, [R1]
 
 mainLoop:
-	ldr R5, =battlers
-	ldr R0, [R5]
-	cmp R0, #0
+	ldr R6, =battlers
+	vldr S0, [R6]
+	vcmp.f32 S0, #0
+	vmrs APSR_nzcv, FPSCR
 	ble gameOver
 	ldr R0, =mainLoopStatusMessage
-	ldr R3, [R5]
-	add R5, R5, #sizeOfStats
-	ldr R1, [R5]
-	add R5, R5, #(sizeOfCoord/2)
-	ldr R2, [R5]
+	vldr S0, [R6]
+	vcvt.f64.f32 D1, S0
+	vmov R4, R5, D1
+	/* R5 outside standard calling convention, 
+	   so push onto stack for printf*/
+	push {R4, R5}
+	add R6, R6, #sizeOfStats
+	ldr R1, [R6]
+	add R6, R6, #(sizeOfCoord/2)
+	ldr R2, [R6]
 	bl printf
+	pop {R4, R5}
 	ldr R0, =map
 	mov R1, #mapBoundHigh
 	ldr R2, =(mapBoundHigh*mapBoundHigh)
@@ -192,31 +215,31 @@ genEnemy:
 enemyOne:
 	cmp R0, #0
 	bne enemyTwo
-	/*50, 11, 2, 5.0*/
-	initBattle 50 11 2 0x40A00000 enemyOneName
+	/*50.0, 11.5, 2.0, 5.0*/
+	initBattle 0x42480000 0x41380000 0x40000000 0x40A00000 enemyOneName
 enemyTwo:
 	cmp R0, #1
 	bne enemyThree
-	/*55, 12, 2, 5.1*/
-	initBattle 55 12 2 0x40A33333 enemyTwoName
+	/*55.0, 12.5, 2.0, 5.1*/
+	initBattle 0x425C0000 0x41480000 0x40000000 0x40A33333 enemyTwoName
 enemyThree:
 	cmp R0, #2
 	bne enemyFour
-	/*60, 13, 3, 5.2*/
-	initBattle 60 13 3 0x40A66666 enemyThreeName
+	/*60.0, 13.5, 3.0, 5.2*/
+	initBattle 0x42700000 0x41580000 0x40400000 0x40A66666 enemyThreeName
 enemyFour:
 	cmp R0, #3
 	bne enemyFive
-	/*60, 13, 3, 6.0*/
-	initBattle 60 13 3 0x40C00000  enemyFourName
+	/*67.0 15.5 5.0 6.0*/
+	initBattle 0x42860000 0x41780000 0x40a00000 0x40c00000 enemyFourName
 enemyFive:
 	cmp R0, #4
 	bne enemySix
-	/*78, 17, 2, 7.0*/
-	initBattle 78 17 2 0x40E00000 enemyFiveName
+	/*78.0, 17.5, 2.0, 7.0*/
+	initBattle 0x429C0000 0x418C0000 0x40000000  0x40E00000 enemyFiveName
 enemySix:
-	/*210, 35, 10, 8.0*/
-	initBattle 210 35 10 0x41000000  enemySixName
+	/*210.0, 35.0, 10.0, 8.0*/
+	initBattle 0x43520000 0x420C0000 0x41200000 0x41000000  enemySixName
 gameOver:
 	ldr R0, =deathMessage
 	bl printf
@@ -234,7 +257,7 @@ endMainLoop:
 .balign 4
 mainLoopStatusMessage: 
 	.ascii "Position: (%d,%d)\n"
-	.asciz "HP: %d\n"
+	.asciz "HP: %f\n"
 mainLoopControlsMessage:
 	.ascii "\nPress r for Right, l for Left, u for Up, or d for down.\n"
 	.asciz "or... Press q to quit\n"
