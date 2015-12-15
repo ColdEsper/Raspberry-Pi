@@ -1,6 +1,4 @@
 .data
-.balign 4
-return2: .word 0
 
 .balign 4
 .text
@@ -52,19 +50,20 @@ initStats:
 */
 initBattler:
 	/* save return address */
-	ldr R5, =return2
-	str LR, [R5]
+	push {IP, LR}
+
 	add R0, R0, #sizeOfStats
 	bl initCoord
 	add R0, R0, #sizeOfCoord
 	str R3, [R0]
 	sub R0, R0, #(sizeOfStats+sizeOfCoord)
 	mov R5, R0
+	pop {IP,LR}
 	pop {R0, R1, R2, R3}
+	push {IP,LR}
 	push {R0, IP}
 	mov R0, R5
 	bl initStats
 	/* return */
-	ldr R5, =return2
-	ldr LR, [R5]
+	pop {IP, LR}
 	bx LR

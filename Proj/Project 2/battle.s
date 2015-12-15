@@ -1,9 +1,3 @@
-.data
-.balign 4
-return: .word 0
-.balign 4
-inputChar: .word 0
-
 .balign 4
 .text
 .global battle
@@ -16,8 +10,7 @@ inputChar: .word 0
 	R1 is pointer to AI battler */
 battle:
 	/*save return address*/
-	ldr R5, =return
-	str LR, [R5]
+	push {IP, LR}
 
 	mov R5, R0
 	mov R6, R1
@@ -49,13 +42,15 @@ battleLoop:
 	bl printf
 	pop {R2, R3}
 	ldr R0, =inputFormat
-	ldr R1, =inputChar
+	sub SP, #8
+	mov R1, SP
 	bl scanf
 	bl getchar
 	/* compare input to A */
 	compareBothCase 0x41 attackEnemy
 	/* compare input to B */
 	compareBothCase 0x42 run
+	add SP, #8
 	b battleLoop
 attackEnemy:
 	/*compare speed*/
@@ -113,8 +108,7 @@ battleLoopEnd:
 	add R1, R1, #1 
 	str R1, [R0]
 	/*return*/
-	ldr R5, =return
-	ldr LR, [R5]
+	pop {IP, LR}
 	bx LR
 
 .balign 4

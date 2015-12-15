@@ -4,7 +4,6 @@ mapSize: .word 0
 mapPointer: .word 0
 mapStart: .word 0
 mapEnd: .word 0
-return: .word 0
 .balign 4
 .text
 .global mapInit
@@ -37,8 +36,7 @@ mapInitEnd:
 	R1 is map width 
 	R2 is map size */
 mapDisplay:
-	ldr R3, =return
-	str LR, [R3]
+	push {IP, LR}
 	ldr R3, =mapStart
 	str R0, [R3]
 	ldr R3, =mapPointer
@@ -80,8 +78,7 @@ printMapSquare:
 	mov R0, R1
 	b mapDisplayLoop
 mapDisplayEnd:
-	ldr LR, =return
-	ldr LR, [LR]
+	pop {IP, LR}
 	bx LR
 
 .global mapCoordinateToIndex
@@ -89,16 +86,12 @@ mapDisplayEnd:
 	R0 is pointer to coordinate
 	R1 is map width*/
 mapCoordinateToIndex:
-	ldr R3, =return
-	str LR, [R3]
 	mov R2, R0
 	add R2, R2, #4
 	ldr R0, [R0]
 	ldr R2, [R2]
 	mul R3, R2, R1
 	add R0, R0, R3
-	ldr LR, =return
-	ldr LR, [LR]
 	bx LR
 
 .global mapSwapCoordinates
@@ -107,8 +100,7 @@ mapCoordinateToIndex:
 	R1 is pointer to other coordinate
 	R2 is map width*/
 mapSwapCoordinates:
-	ldr R3, =return
-	str LR, [R3]
+	push {IP, LR}
 	ldr R3, =mapWidth
 	str R2, [R3]
 	mov R4, R1
@@ -124,8 +116,7 @@ mapSwapCoordinates:
 	ldr R1, [R0]
 	str R2, [R0]
 	str R1, [R4]
-	ldr LR, =return
-	ldr LR, [LR]
+	pop {IP, LR}
 	bx LR
 
 mapSquareMessage: .asciz "%c"

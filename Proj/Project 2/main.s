@@ -15,12 +15,6 @@ map: .skip mapBoundHigh*mapBoundHigh
 battlers: .skip sizeOfBattler*2
 
 .balign 4
-inputChar: .byte 0
-
-.balign 4
-return: .word 0
-
-.balign 4
 .text
 .include "battler.s"
 .include "usefulMacros.s"
@@ -59,8 +53,7 @@ return: .word 0
 
 main:
 	/* save return address*/
-	ldr R5, =return
-	str LR, [R5]
+	push {IP, LR}
 
 	/*initialization*/
 	mov R0, #0
@@ -145,7 +138,8 @@ mainLoop:
 	ldr R0, =mainLoopControlsMessage
 	bl printf
 	ldr R0, =mainInputFormat
-	ldr R1, =inputChar
+	sub SP, #8
+	mov R1, SP
 	bl scanf
 	/* remove newline still in buffer 
 	(newline in buffer will printf to print twice when loop repeats)*/
@@ -161,6 +155,7 @@ mainLoop:
 	compareBothCase 0x44, moveDown
 	/* compare to ASCII Q*/
 	compareBothCase 0x51, endMainLoop 
+	add SP, #8
 	b mainLoop
 moveLeft:
 	ldr R2, =(battlers+sizeOfStats)
@@ -249,8 +244,7 @@ endMainLoop:
 	ldr R1, [R1]
 	bl printf
 	/*return*/
-	ldr R5, =return
-	ldr LR, [R5]
+	pop {IP, LR}
 	bx LR
 
 /*constants*/
