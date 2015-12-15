@@ -1,5 +1,3 @@
-.data
-
 .balign 4
 .text
 .include "battler.s"

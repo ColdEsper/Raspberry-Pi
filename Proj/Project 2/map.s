@@ -1,9 +1,4 @@
 .data
-mapWidth: .word 0
-mapSize: .word 0
-mapPointer: .word 0
-mapStart: .word 0
-mapEnd: .word 0
 .balign 4
 .text
 .global mapInit
@@ -37,29 +32,29 @@ mapInitEnd:
 	R2 is map size */
 mapDisplay:
 	push {IP, LR}
-	ldr R3, =mapStart
-	str R0, [R3]
-	ldr R3, =mapPointer
-	str R0, [R3]
-	ldr R3, =mapEnd
+	/* stack:
+	   pointer [SP,#0],
+	   start of map #4, 
+	   end #8,
+	   width #12, 
+	   map size #16 */
+	sub SP, #24
+	str R0, [SP]
+	str R0, [SP,#4]
 	add R0, R0, R2
-	str R0, [R3]
-	ldr R3, =mapWidth
-	str R1, [R3]
-	ldr R3, =mapSize
-	str R2, [R3]
-	ldr R0, =mapPointer
-	ldr R0, [R0]
+	str R0, [SP,#8]
+	str R1, [SP,#12]
+	str R2, [SP,#16]
+	ldr R0, [SP]
 mapDisplayLoop:
-	ldr R3, =mapEnd
-	ldr R3, [R3]
+	/*if pointer reached end, exit*/
+	ldr R3, [SP,#8]
 	cmp R0, R3
 	beq mapDisplayEnd
-	ldr R1, =mapStart
-	ldr R1, [R1]
+	/* if end of row reached, print new line */
+	ldr R1, [SP,#4]
 	sub R0, R0, R1
-	ldr R1, =mapWidth
-	ldr R1, [R1]
+	ldr R1, [SP,#12]
 	bl mod
 	cmp R0, #0
 	bne printMapSquare
@@ -67,17 +62,17 @@ mapDisplayLoop:
 	bl printf
 printMapSquare:
 	ldr R0, =mapSquareMessage
-	ldr R1, =mapPointer
-	ldr R1, [R1]
+	ldr R1, [SP]
 	ldr R1, [R1]
 	bl printf
-	ldr R0, =mapPointer
-	ldr R1, [R0]
+	/*increment pointer*/
+	ldr R1, [SP]
 	add R1, R1, #1
-	str R1, [R0]
+	str R1, [SP]
 	mov R0, R1
 	b mapDisplayLoop
 mapDisplayEnd:
+	add SP, #24
 	pop {IP, LR}
 	bx LR
 
@@ -101,21 +96,22 @@ mapCoordinateToIndex:
 	R2 is map width*/
 mapSwapCoordinates:
 	push {IP, LR}
-	ldr R3, =mapWidth
-	str R2, [R3]
+	sub SP, #8
+	str R2, [SP]
 	mov R4, R1
 	mov R1, R2
 	bl mapCoordinateToIndex
 	mov R3, R0
 	mov R0, R4
 	mov R4, R3
-	ldr R1, =mapWidth
-	ldr R1, [R1]
+	ldr R1, [SP]
 	bl mapCoordinateToIndex
+	/*perform swap based on indexes*/
 	ldr R2, [R4]
 	ldr R1, [R0]
 	str R2, [R0]
 	str R1, [R4]
+	add SP, #8
 	pop {IP, LR}
 	bx LR
 
