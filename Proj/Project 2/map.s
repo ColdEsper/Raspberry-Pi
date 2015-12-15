@@ -1,4 +1,3 @@
-.data
 .balign 4
 .text
 .global mapInit
