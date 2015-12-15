@@ -13,9 +13,9 @@ struct Coord {
 };
 
 struct Stats {
-	int hp;
-	int attack;
-	int defense;
+	float hp;
+	float attack;
+	float defense;
 	float speed;
 };
 
@@ -29,7 +29,7 @@ void attack (struct Battler* attacker,struct Battler* receiver) {
 	if (attacker->stats.attack > receiver->stats.defense) {
 		receiver->stats.hp-=attacker->stats.attack-receiver->stats.defense;
 	} else {
-		receiver->stats.hp-=1;
+		receiver->stats.hp-=1.0f;
 	}
 }
 void battle (struct Battler* player,struct Battler* enemy) {
@@ -45,7 +45,7 @@ void battle (struct Battler* player,struct Battler* enemy) {
 			score+=1;
 			return;
 		}
-		printf("HP: %d     Enemy HP: %d\n",player->stats.hp,enemy->stats.hp);
+		printf("HP: %f     Enemy HP: %f\n",player->stats.hp,enemy->stats.hp);
 		printf("-------------------------\n");
 		printf("|  a)Attack    b)Run    |\n");
 		printf("-------------------------\n");
@@ -92,8 +92,8 @@ void battle (struct Battler* player,struct Battler* enemy) {
 	}
 }
 
-void initBattle (struct Battler* player, int hp, int attack, 
-		int defense, float speed, const char* name) {
+void initBattle (struct Battler* player, float hp, float attack, 
+		float defense, float speed, const char* name) {
 	struct Battler enemy;
 	enemy.stats.hp = hp;
 	enemy.stats.attack = attack;
@@ -109,22 +109,22 @@ void chanceEncounter (struct Battler* player) {
 		odds = rand() % 6;
 		switch(odds) {
 			case 0:
-				initBattle(player,50,11,2,5.0f,"Enemy V1");
+				initBattle(player,50.0f,11.5f,2.0f,5.0f,"Enemy V1");
 				break;
 			case 1:
-				initBattle(player,55,12,2,5.1f,"Enemy V2");
+				initBattle(player,55.0f,12.5f,2.0f,5.1f,"Enemy V2");
 				break;
 			case 2:
-				initBattle(player,60,13,3,5.2f,"Enemy V3");
+				initBattle(player,60.0f,13.5f,3.0f,5.2f,"Enemy V3");
 				break;
 			case 3:
-				initBattle(player,67,15,5,6.0f,"Enemy V4");
+				initBattle(player,67.0f,15.5f,5.0f,6.0f,"Enemy V4");
 				break;
 			case 4:
-				initBattle(player,78,17,2,7.0f,"Enemy V5");
+				initBattle(player,78.0f,17.5f,2.0f,7.0f,"Enemy V5");
 				break;
 			case 5:
-				initBattle(player,210,35,10,8.0f,"Enemy V6");
+				initBattle(player,210.0f,35.0f,10.0f,8.0f,"Enemy V6");
 				break;
 		}
 	}
@@ -139,8 +139,8 @@ int main() {
 		map[i] = '^';
 	}
 	player.stats.hp = 100;
-	player.stats.attack = 51;
-	player.stats.defense = 5;
+	player.stats.attack = 51.0f;
+	player.stats.defense = 5.0f;
 	player.stats.speed = 6.0f;
 	player.pos.x = 12;
 	player.pos.y = 12;
@@ -153,7 +153,7 @@ int main() {
 			return;
 		}
 		printf("Position: (%d,%d)\n",player.pos.x,player.pos.y);
-		printf("HP: %d\n",player.stats.hp);
+		printf("HP: %f\n",player.stats.hp);
 		for (i=0;i<MAP_SIZE;++i) {
 			if (i%MAP_WIDTH == 0) {
 				printf("\n");
